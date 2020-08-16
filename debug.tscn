@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://wall_runner.gd" type="Script" id=1]
+[ext_resource path="res://controllable_pivot.gd" type="Script" id=2]
+[ext_resource path="res://controllable_character_movement.gd" type="Script" id=3]
+[ext_resource path="res://controllable_character_jump.gd" type="Script" id=4]
+[ext_resource path="res://speedometer.gd" type="Script" id=5]
+[ext_resource path="res://debug_script.gd" type="Script" id=6]
+
+[sub_resource type="CapsuleShape" id=1]
+radius = 0.4
+
+[sub_resource type="CubeMesh" id=2]
+size = Vector3( 50, 0, 15 )
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 25, 0, 7.5 )
+
+[node name="Spatial" type="Spatial"]
+script = ExtResource( 6 )
+
+[node name="ClassicCharacter" type="KinematicBody" parent="."]
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="ClassicCharacter"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="ClassicCharacter"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.9, 0 )
+shape = SubResource( 1 )
+
+[node name="ControllablePivot" type="Spatial" parent="ClassicCharacter"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.54809, 0 )
+script = ExtResource( 2 )
+max_pitch = 90.0
+
+[node name="Camera" type="Camera" parent="ClassicCharacter/ControllablePivot"]
+
+[node name="ControllableCharacterMovement" type="Node" parent="ClassicCharacter"]
+script = ExtResource( 3 )
+rotation_style = 0
+basis_node_path = NodePath("../ControllablePivot")
+
+[node name="ControllableCharacterJump" type="Node" parent="ClassicCharacter"]
+script = ExtResource( 4 )
+initial_jump_height = 0.8
+full_jump_height = 2.4
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.353965, -0.935259, 0, 0.935259, 0.353965, 0, 6.88421, -9.93102 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance2/StaticBody"]
+shape = SubResource( 3 )
